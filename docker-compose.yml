@@ -12,6 +12,7 @@ services:
 
   frontend:
     build: ./frontend
+    command: npm run dev
     volumes:
       - ./frontend:/app
     ports:
