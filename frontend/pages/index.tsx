@@ -1,7 +1,9 @@
-import Dygraph from 'dygraphs';
 import {useEffect, useState} from "react";
 import axios from 'axios';
 import SelectETF from "../components/selectETF";
+import dynamic from 'next/dynamic';
+const ApexCharts = dynamic(() => import('react-apexcharts'), { ssr: false });
+
 
 export default function Home() {
     const [ETF, setETF] = useState<string>('SPY')
@@ -10,13 +12,39 @@ export default function Home() {
     // todo: change
     const symbol: string = 'SPY'
     const num_iterations: number = 50
+    const graph_options = {
+        chart: {
+            animations: {
+                enabled: false
+            },
+            type: 'line',
+            zoom: {
+                enabled: true
+            }
+        },
+        legend: {
+            show: false
+        },
+        dataLabels: {
+            enabled: false
+        },
+        tooltip: {
+            enabled: false
+        },
+        xaxis: {
+            labels: {
+                formatter: (value: any) => ""
+            }
+        }
+    }
 
 
     useEffect(() => {
-        axios.get(`0.0.0.0:8000/monte-carlo-data/${symbol}/${num_iterations}`)
+        axios.get(`http://0.0.0.0:8000/monte-carlo-data/${symbol}/${num_iterations}`)
             .then(response => {
                 setData(response.data.data);
                 setSimulations(response.data.simulations)
+
             }).catch(error => {
             // todo: error handling
         })
@@ -31,7 +59,13 @@ export default function Home() {
             </div>
 
             <section className='bg-white shadow-lg border-t p-6 md:mx-48 h-full rounded-lg'>
-                
+                <div className='grid grid-cols-1 gap-16 h-full'>
+                        {simulations.length > 0 && <ApexCharts
+                        type="line"
+                        options={graph_options}
+                        series={simulations}
+                    />}
+                </div>
             </section>
 
         </div>
