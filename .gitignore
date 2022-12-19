@@ -2,4 +2,4 @@ venv
 frontend/node_modules
 frontend/.next
 .idea
-secrets.py
+api_secrets.py
