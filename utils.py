@@ -1,11 +1,11 @@
 import requests
 import pandas as pd
 import numpy as np
-import secrets
+import api_secrets
 
 
 def historical_data(symbol: str, timescale='1y') -> pd.DataFrame:
-    url = f"https://cloud.iexapis.com/stable/stock/{symbol}/chart/{timescale}?token={secrets.iex_public_key}"
+    url = f"https://cloud.iexapis.com/stable/stock/{symbol}/chart/{timescale}?token={api_secrets.iex_public_key}"
     data = [[i['date'], i['open'], i['high'], i['low'], i['close'], i['volume']] for i in requests.get(url).json()]
     df = pd.DataFrame(data, columns=['date', 'open', 'high', 'low', 'close', 'volume'])
     df.set_index('date', inplace=True)
