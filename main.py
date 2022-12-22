@@ -41,9 +41,16 @@ async def get_mc_data(symbol: str, num_iterations: int):
             })
 
         return {
+            'lastClose': close_series[-1],
+            'lastDate': time_idx[-1],
             'data': close_series,
             'simulations': mc_data
         }
 
     except ValueError:
         return Response(status_code=404, content="Invalid symbol.")
+
+
+@app.get('/symbols')
+def symbols():
+    return ['SPY']
